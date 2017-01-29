@@ -16,3 +16,8 @@ def login():
         flash('Login Requested for OPENID="%s", remember_me="%s" ' % (form.openid.data, str(form.remember_me.data)))
         return redirect('/index')
     return render_template('login.html', title='Sign In', form=form, providers=app.config['OPEDID_PROVIDERS'])
+
+@lm.user_loader()
+def load_user(id):
+    return User.query.get(int(id))
+
