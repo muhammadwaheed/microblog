@@ -6,8 +6,9 @@ from  .models import User
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
-    user = {'username': 'fake'} #fake user
+    user = g.user
     posts = [{'author': {'nickname': 'Mike'}, 'body': 'Beautiful day'}, {'author': {'nickname': 'Choi'},'body': 'Success Reloading ...'}]
     return render_template('index.html', title='Home', user=user, posts=posts)
 
@@ -46,3 +47,7 @@ def after_login(resp):
         session.pop('remember_me', None)
     load_user(user, remember_me=remember_me)
     return redirect(request.args.get('next') or url_for('index'))
+
+@app.before_request
+def before_request():
+    g.user =current_user
